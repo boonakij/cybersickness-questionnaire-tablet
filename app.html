@@ -392,7 +392,6 @@
           });
           arr = []
           $("#part-2-container").find('input[type="radio"]:checked').each(function(){
-             console.log($(this).val());
              arr.push($(this).val());
           });
         }
@@ -404,11 +403,19 @@
           });
           arr = []
           $("#part-1-container").find('input[type="radio"]:checked').each(function(){
-             console.log($(this).val());
              arr.push($(this).val());
           });
         }
         return allAnswered;
+      }
+
+      function sendData(scores) {
+        request = $.ajax({
+          url: "courseplan.pro/includes/send_data.php",
+          type: "POST",
+          data: {"scores": scores},
+          success: function() { }
+        });
       }
 
       $(".clear-button").click(function() {
@@ -427,9 +434,14 @@
         }
       });
 
+
+      var scores = "";
       $("#nextButton").click(function(){
         // let answers = ($(document.getElementsByClassName('debug')).html());
         console.log(arr);
+        if (scores.length < 9) {
+          scores += arr.join("");
+        }
         // window.location.href = "ui-questions.html";
         $("#part-1-container").fadeOut(function(){
           $("#part-2-container").fadeIn();
@@ -440,6 +452,11 @@
       $("#submitButton").click(function(){
         // let answers = ($(document.getElementsByClassName('debug')).html());
         console.log(arr);
+        if (scores.length < 17) {
+          scores += arr.join("");
+          sendData(scores);
+        }
+        console.log(scores);
         // window.location.href = "index2.html";
         // return answers; //storing answers? Probably need PHP
       });
